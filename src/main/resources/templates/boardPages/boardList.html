@@ -2,10 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>게시판목록</title>
+    <th:block th:replace="component/config :: config"></th:block>
 </head>
 <body>
+<div th:replace="component/header :: header"></div>
+<div th:replace="component/nav :: nav"></div>
+
+
 <h2>게시판 목록</h2>
 <div id="section">
     <table>
@@ -15,20 +18,24 @@
         <th>title</th>
         <th>contents</th>
         <th>hits</th>
+            <th>작성시간</th>
 
         </tr>
 
         <tr th:each="board: ${boardList}">
             <td th:text="${board.id}"></td>
             <td th:text="${board.boardWriter}"></td>
-            <td th:text="${board.boardTitle}"></td>
+            <td><a th:href="@{|/board/${board.id}|}" th:text="${board.boardTitle}"></a></td>
             <td th:text="${board.boardContents}"></td>
             <td th:text="${board.boardHits}"></td>
+            <td th:text="${board.createdAt}"></td>
 
         </tr>
 
     </table>
 </div>
+
+<div th:replace="component/footer :: footer"></div>
 
 </body>
 </html>

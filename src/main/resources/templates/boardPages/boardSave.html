@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>게시판등록</title>
+    <th:block th:replace="component/config :: config"></th:block>
+
 </head>
 <body>
+<div th:replace="component/header :: header"></div>
+<div th:replace="component/nav :: nav"></div>
 
 <h2>게시판 등록</h2>
 <form action="/board/save" method="post" id="saveForm">
@@ -16,6 +18,7 @@
 
 
 </form>
+<div th:replace="component/footer :: footer"></div>
 
 </body>
 </html>
