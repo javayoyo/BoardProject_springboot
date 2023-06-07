@@ -17,7 +17,6 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @RequestMapping("/board")
 public class BoardController {
-
     private final BoardService boardService;
 
     @GetMapping("/save")
@@ -28,8 +27,7 @@ public class BoardController {
     @PostMapping("/save")
     public String save(@ModelAttribute BoardDTO boardDTO) throws IOException {
         boardService.save(boardDTO);
-
-        return "index";
+        return "redirect:/board/";
     }
 
     @GetMapping("/")
@@ -45,14 +43,12 @@ public class BoardController {
         BoardDTO boardDTO = null;
         try {
             boardDTO = boardService.findById(id);
-        }catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             return "boardPages/boardNotFound";
         }
         model.addAttribute("board", boardDTO);
         return "boardPages/boardDetail";
     }
-//    예외인 경우, 사용자 전용 에러페이지 출력하도록 한다
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
@@ -71,7 +67,18 @@ public class BoardController {
     public ResponseEntity update(@RequestBody BoardDTO boardDTO) {
         boardService.update(boardDTO);
         return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
-
 }
+
+
+
+
+
+
+
+
+
+
+
