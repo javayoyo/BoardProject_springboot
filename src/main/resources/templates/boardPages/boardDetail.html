@@ -10,44 +10,45 @@
 <div th:replace="component/nav :: nav"></div>
 
 <div id="section">
-    <table>
+    <table class="table table-hover">
         <tr>
             <th>id</th>
             <td th:text="${board.id}"></td>
         </tr>
         <tr>
-            <th>boardWriter</th>
-            <td th:text="${board.boardWriter}"></td>
-        </tr>
-        <tr>
-            <th>boardTitle</th>
+            <th>title</th>
             <td th:text="${board.boardTitle}"></td>
         </tr>
         <tr>
-            <th>boardContents</th>
-            <td th:text="${board.boardContents}"></td>
+            <th>writer</th>
+            <td th:text="${board.boardWriter}"></td>
         </tr>
         <tr>
-            <th>boardHits</th>
+            <th>date</th>
+            <td th:text="${board.createdAt}"></td>
+        </tr>
+        <tr>
+            <th>hits</th>
             <td th:text="${board.boardHits}"></td>
         </tr>
         <tr>
-            <th>createdAt</th>
-            <td th:text="${board.createdAt}"></td>
+            <th>contents</th>
+            <td th:text="${board.boardContents}"></td>
         </tr>
-
-
     </table>
 
-    <button onclick="list_req()">글목록</button>
-    <button onclick="update_req()">수정</button>
-    <button onclick="delete_req()">삭제</button>
+    <div class="container">
+        <button class="btn btn-primary" onclick="list_req()">목록</button>
+        <button class="btn btn-warning" onclick="req('update')">수정</button>
+        <button class="btn btn-danger" onclick="req('delete')">삭제</button>
+    <!--    매개변수의 값은 '' 싱글쿼터를 활용 -->
 
 </div>
 <!--비밀번호를 검증-->
-<div id = "pass-check">
+<div id="pass-check">
 
 
+</div>
 </div>
 
 
@@ -62,40 +63,50 @@
 
     }
 
-    const update_req = () => {
-
+    const req = (type) => {
+        console.log("type", type);
         document.getElementById("pass-check").innerHTML = "<input type=\"text\" placeholder=\"password\" id=\"password\">\n" +
-            "    <button onclick=\"update_pass_check()\">확인</button>";
-
+            "    <button onclick=\"pass_check('" + type + "')\">확인</button>";
+        // 변수 활용 시, 해당 콘솔에서 "type" , 매개변수를 끌고 올 때 ' ' > 이중처리해야함
 
     }
 
-    const update_pass_check = () => {
-      const password = document.getElementById("password").value;
-      const passDB = [[${board.boardPass}]];
-      const id = [[${board.id}]];
-      if(password == passDB) {
-          location.href = "/board/update/" + id;
-      }else {
-          alert("비밀번호 불일치");
-      }
+    const pass_check = (type) => {
+        console.log("pass_check type 변수 값", type);
+        const password = document.getElementById("password").value;
+        const passDB = [[${board.boardPass}]];
+        const id = [[${board.id}]];
+        if (password == passDB) {
+            if (type == "update") {
+                location.href = "/board/update/" + id;
+
+            } else if (type == "delete") {
+                // location.href = "/board/delete/" + id;
+                axios({
+                    method: "delete",
+                    url: "/board/" + id
+                }).then(res => {
+                    location.href = "/board/";
+                }).catch(err => {
+                    alert("삭제 실패");
+
+                });
+            }
+
+        } else {
+            alert("비밀번호 불일치");
+        }
     }
     // ㄴ 비밀번호 검증을 위해 일치하면 수정화면으로 이동
 
-    const delete_req = () => {
-        document.getElementById("pass-check").innerHTML = "<input type=\"text\" placeholder=\"password\" id=\"password\">\n" +
-            "    <button onclick=\"delete_pass_check()\">확인</button>";
-
-
-    }
 
     const delete_pass_check = () => {
         const password = document.getElementById("password").value;
         const passDB = [[${board.boardPass}]];
         const id = [[${board.id}]];
-        if(password == passDB) {
+        if (password == passDB) {
             // location.href = "/board/delete/" + id;
-            axios ({
+            axios({
                 method: "delete",
                 url: "/board/" + id
             }).then(res => {
@@ -103,7 +114,7 @@
             }).catch(err => {
                 alert("삭제 실패");
             })
-        }else {
+        } else {
             alert("비밀번호 불일치");
         }
     }

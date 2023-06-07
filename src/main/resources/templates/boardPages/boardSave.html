@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="component/config :: config"></th:block>
 
@@ -9,12 +9,13 @@
 <div th:replace="component/nav :: nav"></div>
 
 <h2>게시판 등록</h2>
-<form action="/board/save" method="post" id="saveForm">
+<form action="/board/save" method="post" id="saveForm" enctype="multipart/form-data">
     <input type="text" placeholder="작성자" name="boardWriter"><br>
     <input type="text" placeholder="제목" name="boardTitle"><br>
     <input type="text" placeholder="비밀번호" name="boardPass"><br>
     <textarea name="boardContents" cols="30" rows="10" placeholder="내용"></textarea><br>
-    <input type="submit" value="등록">
+    <input type="file" name="boardFile" class="form-control">
+    <input type="submit" value="등록" class="btn btn-primary">
 
 
 </form>
