@@ -1,11 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>게시판상세조회</title>
+
+    <th:block th:replace="component/config :: config"></th:block>
 </head>
 <body>
-<h2>게시판상세조회</h2>
+<div th:replace="component/header :: header"></div>
+<div th:replace="component/nav :: nav"></div>
+
+<div id="section">
+    <table>
+        <tr>
+            <th>id</th>
+            <td th:text="${board.id}"></td>
+        </tr>
+        <tr>
+            <th>boardWriter</th>
+            <td th:text="${board.boardWriter}"></td>
+        </tr>
+        <tr>
+            <th>boardTitle</th>
+            <td th:text="${board.boardTitle}"></td>
+        </tr>
+        <tr>
+            <th>boardContents</th>
+            <td th:text="${board.boardContents}"></td>
+        </tr>
+        <tr>
+            <th>boardHits</th>
+            <td th:text="${board.boardHits}"></td>
+        </tr>
+        <tr>
+            <th>createdAt</th>
+            <td th:text="${board.createdAt}"></td>
+        </tr>
+
+
+    </table>
+
+    <button onclick="list_req()">글목록</button>
+    <button onclick="update_req()">수정</button>
+    <button onclick="delete_req()">삭제</button>
+
+</div>
+<!--비밀번호를 검증-->
+<div id = "pass-check">
+
+
+</div>
+
+
+<div th:replace="component/footer :: footer"></div>
 
 </body>
+
+<script th:inline="javascript">
+
+    const list_req = () => {
+        location.href = "/board/";
+
+    }
+
+    const update_req = () => {
+
+        document.getElementById("pass-check").innerHTML = "<input type=\"text\" placeholder=\"password\" id=\"password\">\n" +
+            "    <button onclick=\"update_pass_check()\">확인</button>";
+
+
+    }
+
+    const update_pass_check = () => {
+      const password = document.getElementById("password").value;
+      const passDB = [[${board.boardPass}]];
+      const id = [[${board.id}]];
+      if(password == passDB) {
+          location.href = "/board/update/" + id;
+      }else {
+          alert("비밀번호 불일치");
+      }
+    }
+    // ㄴ 비밀번호 검증을 위해 일치하면 수정화면으로 이동
+
+    const delete_req = () => {
+        document.getElementById("pass-check").innerHTML = "<input type=\"text\" placeholder=\"password\" id=\"password\">\n" +
+            "    <button onclick=\"delete_pass_check()\">확인</button>";
+
+
+    }
+
+    const delete_pass_check = () => {
+        const password = document.getElementById("password").value;
+        const passDB = [[${board.boardPass}]];
+        const id = [[${board.id}]];
+        if(password == passDB) {
+            // location.href = "/board/delete/" + id;
+            axios ({
+                method: "delete",
+                url: "/board/" + id
+            }).then(res => {
+                location.href = "/board/";
+            }).catch(err => {
+                alert("삭제 실패");
+            })
+        }else {
+            alert("비밀번호 불일치");
+        }
+    }
+
+
+</script>
 </html>
