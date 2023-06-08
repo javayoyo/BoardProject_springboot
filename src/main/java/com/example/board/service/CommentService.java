@@ -37,7 +37,7 @@ public class CommentService {
 
         // 2. CommentRepository 에서 가져오기
         // select * from comment_table where board_id=?
-        List<CommentEntity> commentEntityList = commentRepository.findByBoardEntity(boardEntity);
+        List<CommentEntity> commentEntityList = commentRepository.findByBoardEntityOrderByIdDesc(boardEntity);
 
         List<CommentDTO> commentDTOList = new ArrayList<>();
         commentEntityList.forEach(comment -> {
