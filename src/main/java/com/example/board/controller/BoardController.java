@@ -50,8 +50,13 @@ public class BoardController {
             model.addAttribute("board", boardDTO);
             List<CommentDTO> commentDTOList = commentService.findAll(id);
             model.addAttribute("commentList", commentDTOList);
-            return "boardPages/boardDetail";
+            if(commentDTOList.size() > 0) {
+                model.addAttribute("commentList", commentDTOList);
+            }else {
+                model.addAttribute("commentList", null);
+            }
 
+            return "boardPages/boardDetail";
 
         } catch (NoSuchElementException e) {
             return "boardPages/boardNotFound";

@@ -54,6 +54,12 @@
 
     </div>
     <div class="container"  id = "comment-list">
+
+        <div th:if="${commentList == null}">
+            <p>작성된 댓글이 없습니다</p>
+        </div>
+
+        <div th:unless="${commentList == null}">
      <table class="table">
 
          <tr>
@@ -72,6 +78,7 @@
 
 
      </table>
+    </div>
     </div>
 
     <div id="comment-result">
