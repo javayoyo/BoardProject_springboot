@@ -32,8 +32,13 @@ public class CommentService {
     public List<CommentDTO> findAll(Long boardId) {
         //1. BoardEntity 에서 댓글 목록 가져오기
         BoardEntity boardEntity = boardRepository.findById(boardId).orElseThrow(() -> new NoSuchElementException() );
-        List<CommentEntity> commentEntityList = boardEntity.getCommentEntityList();
+//        List<CommentEntity> commentEntityList = boardEntity.getCommentEntityList();
 //        캐시 정보를 db에 반영시키도록 한다 (부모엔티티에서 자식엔티티로 접근하는경우, @Transactional 필요함
+
+        // 2. CommentRepository 에서 가져오기
+        // select * from comment_table where board_id=?
+        List<CommentEntity> commentEntityList = commentRepository.findByBoardEntity(boardEntity);
+
         List<CommentDTO> commentDTOList = new ArrayList<>();
         commentEntityList.forEach(comment -> {
         commentDTOList.add(CommentDTO.toDTO(comment));

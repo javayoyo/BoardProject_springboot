@@ -138,8 +138,8 @@
     }
 
     const comment_write = () => {
-        const commentWriter = document.querySelector("#comment-writer").value;
-        const commentContents = document.querySelector("#comment-contents").value;
+        const writer = document.querySelector("#comment-writer").value;
+        const contents = document.querySelector("#comment-contents").value;
         const boardId = [[${board.id}]];
         // const result = document.getElementById("comment-list");
 
@@ -147,8 +147,8 @@
             method: "post",
             url: "/comment/save",
             data: {
-              commentWriter: commentWriter,
-              commentContents: commentContents,
+              commentWriter: writer,
+              commentContents: contents,
               boardId: boardId
             }
 
