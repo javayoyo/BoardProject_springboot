@@ -3,11 +3,9 @@ package com.example.board.entity;
 import com.example.board.dto.BoardDTO;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.CreationTimestamp;
+
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

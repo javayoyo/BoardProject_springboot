@@ -40,7 +40,7 @@ public class BoardService {
                 String storedFileName = System.currentTimeMillis() + "_" + originalFileName;
                 String savePath = "D:\\springboot_img\\" + storedFileName;
                 boardFile.transferTo(new File(savePath));
-//                 3. BoardFileEntity로 변환 후 board_file_table에 저장
+                //        3. BoardFileEntity로 변환 후 board_file_table에 저장
                 // 자식 데이터를 저장할 때 반드시 부모의 id가 아닌 부모의 Entity 객체가 전달돼야 함.
                 BoardFileEntity boardFileEntity =
                         BoardFileEntity.toSaveBoardFileEntity(savedEntity, originalFileName, storedFileName);

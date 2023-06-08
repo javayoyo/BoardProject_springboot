@@ -23,8 +23,7 @@
         </tr>
         <tr>
             <th>date</th>
-            <td th:text="${board.createdAt}"></td>
-        </tr>
+            <td th:text="*{#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>        </tr>
         <tr>
             <th>hits</th>
             <td th:text="${board.boardHits}"></td>
@@ -46,6 +45,45 @@
         <button class="btn btn-danger" onclick="req('delete')">삭제</button>
     </div>
     <div id="pass-check">
+
+    </div>
+    <div id="comment-write-area">
+    <input type="text" id="comment-writer" placeholder="댓글작성자">
+    <input type="text" id="comment-contents" placeholder="댓글내용">
+    <button onclick="comment_write()">댓글작성</button>
+
+    </div>
+    <div class="container"  id = "comment-list">
+        <th:if test="${commentList == null}">
+            <h2>작성된 댓글이 없습니다.</h2>
+
+
+       <th:else>
+<table>
+    <tr>
+        <th>id</th>
+        <th>작성자</th>
+        <th>내용</th>
+    </tr>
+
+    <tr th:each="comment: ${commentList}">
+        <td th:text="${comment.id}"></td>
+        <td th:text="${comment.commentWriter}"></td>
+        <td th:text="${comment.commentContents}"></td>
+
+    </tr>
+
+</table>
+
+       </th:else>
+        </th:if>
+
+
+    </div>
+
+
+    <div id="comment-result">
+
 
     </div>
 
@@ -97,6 +135,33 @@
         } else {
             alert("비밀번호 불일치!!");
         }
+    }
+
+    const comment_write = () => {
+        const commentWriter = document.querySelector("#comment-writer").value;
+        const commentContents = document.querySelector("#comment-contents").value;
+        const boardId = [[${board.id}]];
+        // const result = document.getElementById("comment-list");
+
+        axios({
+            method: "post",
+            url: "/comment/save",
+            data: {
+              commentWriter: commentWriter,
+              commentContents: commentContents,
+              boardId: boardId
+            }
+
+        }).then(res => {
+            console.log("res", res);
+
+        }).catch(err => {
+            console.log("err", err);
+
+        });
+
+
+
     }
 
 

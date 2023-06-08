@@ -1,7 +1,8 @@
 package com.example.board.repository;
 
 import com.example.board.dto.CommentDTO;
+import com.example.board.entity.CommentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CommentRepository {
+public interface CommentRepository extends JpaRepository<CommentEntity, Long>{
 }
