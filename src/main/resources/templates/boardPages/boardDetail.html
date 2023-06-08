@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
     <th:block th:replace="component/config :: config"></th:block>
 </head>
 <body>
@@ -25,7 +23,7 @@
         </tr>
         <tr>
             <th>date</th>
-            <td th:text="*{#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${board.createdAt}"></td>
         </tr>
         <tr>
             <th>hits</th>
@@ -35,7 +33,6 @@
             <th>contents</th>
             <td th:text="${board.boardContents}"></td>
         </tr>
-
         <tr th:if="${board.fileAttached == 1}">
             <th>image</th>
             <td th:each="fileName: ${board.storedFileName}">
@@ -43,39 +40,28 @@
             </td>
         </tr>
     </table>
-
     <div class="container">
         <button class="btn btn-primary" onclick="list_req()">목록</button>
         <button class="btn btn-warning" onclick="req('update')">수정</button>
         <button class="btn btn-danger" onclick="req('delete')">삭제</button>
-    <!--    매개변수의 값은 '' 싱글쿼터를 활용 -->
+    </div>
+    <div id="pass-check">
+
+    </div>
 
 </div>
-<!--비밀번호를 검증-->
-<div id="pass-check">
-
-
-</div>
-</div>
-
 
 <div th:replace="component/footer :: footer"></div>
-
 </body>
-
 <script th:inline="javascript">
-
     const list_req = () => {
         location.href = "/board/";
-
     }
 
     const req = (type) => {
         console.log("type", type);
         document.getElementById("pass-check").innerHTML = "<input type=\"text\" placeholder=\"password\" id=\"password\">\n" +
-            "    <button onclick=\"pass_check('" + type + "')\">확인</button>";
-        // 변수 활용 시, 해당 콘솔에서 "type" , 매개변수를 끌고 올 때 ' ' > 이중처리해야함
-
+            "        <button onclick=\"pass_check('" + type + "')\">확인</button>";
     }
 
     const pass_check = (type) => {
@@ -86,45 +72,33 @@
         if (password == passDB) {
             if (type == "update") {
                 location.href = "/board/update/" + id;
-
             } else if (type == "delete") {
-                // location.href = "/board/delete/" + id;
+                // location.href = "/board/delete/"+id;
                 axios({
                     method: "delete",
-                    url: "/board/" + id
+                    url: "/board/"+id
                 }).then(res => {
                     location.href = "/board/";
                 }).catch(err => {
-                    alert("삭제 실패");
-
+                    alert("삭제 실패!!");
                 });
             }
-
         } else {
-            alert("비밀번호 불일치");
+            alert("비밀번호 불일치!!");
         }
     }
-    // ㄴ 비밀번호 검증을 위해 일치하면 수정화면으로 이동
-
 
     const delete_pass_check = () => {
         const password = document.getElementById("password").value;
         const passDB = [[${board.boardPass}]];
         const id = [[${board.id}]];
         if (password == passDB) {
-            // location.href = "/board/delete/" + id;
-            axios({
-                method: "delete",
-                url: "/board/" + id
-            }).then(res => {
-                location.href = "/board/";
-            }).catch(err => {
-                alert("삭제 실패");
-            })
+
         } else {
-            alert("비밀번호 불일치");
+            alert("비밀번호 불일치!!");
         }
     }
+
 
 
 </script>
