@@ -1,7 +1,9 @@
 package com.example.board.controller;
 
 import com.example.board.dto.BoardDTO;
+import com.example.board.dto.CommentDTO;
 import com.example.board.service.BoardService;
+import com.example.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ import java.util.NoSuchElementException;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
+    private final CommentService commentService;
+
 
     @GetMapping("/save")
     public String saveForm() {
@@ -40,14 +44,19 @@ public class BoardController {
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model) {
         boardService.updateHits(id);
-        BoardDTO boardDTO = null;
+
         try {
-            boardDTO = boardService.findById(id);
+            BoardDTO boardDTO = boardService.findById(id);
+            model.addAttribute("board", boardDTO);
+            List<CommentDTO> commentDTOList = commentService.findAll(id);
+            model.addAttribute("commentList", commentDTOList);
+            return "boardPages/boardDetail";
+
+
         } catch (NoSuchElementException e) {
             return "boardPages/boardNotFound";
         }
-        model.addAttribute("board", boardDTO);
-        return "boardPages/boardDetail";
+
     }
 
     @DeleteMapping("/{id}")

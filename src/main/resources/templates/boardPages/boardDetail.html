@@ -55,27 +55,29 @@
     </div>
     <div class="container"  id = "comment-list">
      <table class="table">
+
          <tr>
              <th>id</th>
              <th>writer</th>
              <th>contents</th>
              <th>date</th>
          </tr>
-         <tr>
-             <td></td>
-             <td></td>
-             <td></td>
-             <td></td>
+
+         <tr th:each="comment: ${commentList}">
+             <td th:text="${comment.id}"></td>
+             <td th:text="${comment.commentWriter}"></td>
+             <td th:text="${comment.commentContents}"></td>
+             <td th:text="${comment.createdAt}"></td>
          </tr>
+
+
      </table>
-
     </div>
-
 
     <div id="comment-result">
 
-
     </div>
+
 
 </div>
 
