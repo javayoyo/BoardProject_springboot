@@ -116,6 +116,8 @@ public class BoardController {
     @PutMapping("/{id}")
     public ResponseEntity update(@RequestBody BoardDTO boardDTO) {
         boardService.update(boardDTO);
+
+
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
