@@ -159,6 +159,7 @@ public class BoardTest {
             System.out.println(BoardDTO.toDTO(boardEntity));
         });
     }
+//    String q = ""; > 전체 데이터 조회
 
     @Test
     @Transactional

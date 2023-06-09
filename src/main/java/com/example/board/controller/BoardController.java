@@ -46,7 +46,10 @@ public class BoardController {
 
     //  /board?page=1
     @GetMapping
-    public String paging(@PageableDefault(page = 1) Pageable pageable, Model model) {
+    public String paging(@PageableDefault(page = 1) Pageable pageable,
+                         @RequestParam(value = "type" , required = false , defaultValue = "title") String type,
+                         @RequestParam(value = "q" , required = false , defaultValue = "") String q,
+                         Model model) {
         System.out.println("pageable = " + pageable);
         System.out.println("page = " + pageable.getPageNumber());
         Page<BoardDTO> boardDTOs =  boardService.paging(pageable);
@@ -61,14 +64,13 @@ public class BoardController {
 //        } else {
 //            endPage = boardDTOs.getTotalPages();
 //        }
+
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+        model.addAttribute("q" , q);
 
         return "boardPages/boardPaging";
     }
-
-
-
 
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, @RequestParam("page") int page, Model model) {
