@@ -36,6 +36,7 @@ public class BoardDTO {
 
 
     public static BoardDTO toDTO(BoardEntity boardEntity) {
+//        부모엔티티가 자식 엔티티 접근하여 요청
         BoardDTO boardDTO = new BoardDTO();
         boardDTO.setId(boardEntity.getId());
         boardDTO.setBoardWriter(boardEntity.getBoardWriter());

@@ -126,10 +126,73 @@ public class BoardTest {
         System.out.println("boardEntities.isLast() = " + boardList.isLast()); // 마지막페이지인지 여부
 
     }
+    
+    @Test
+    @DisplayName("검색 기능 테스트")
+//    ㄴ 제목으로 검색
+    public void searchTest() {
+        List<BoardEntity> boardEntityList = boardRepository.findByBoardTitleContaining("5");
+        boardEntityList.forEach(boardEntity -> {
+            System.out.println(BoardDTO.toDTO(boardEntity));
+        });
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("검색 기능 테스트")
+//    ㄴ 작성자로 검색
+    public void searchTestboardWriter() {
+        List<BoardEntity> boardEntityList = boardRepository.findByBoardWriterContaining("글");
+        boardEntityList.forEach(boardEntity -> {
+            System.out.println(BoardDTO.toDTO(boardEntity));
+        });
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("검색 기능 테스트")
+//    ㄴ 제목 or 작성자로 검색
+    public void searchTest1() {
+        String q = "글";
+        List<BoardEntity> boardEntityList = boardRepository.findByBoardTitleContainingOrBoardWriterContainingOrderByIdDesc(q,q);
+        boardEntityList.forEach(boardEntity -> {
+            System.out.println(BoardDTO.toDTO(boardEntity));
+        });
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("검색결과 페이징")
+    public void searchPaging() {
+        String q = "2";
+        int page = 0;
+        int pageLimit = 3;
+        Page<BoardEntity> boardEntities = boardRepository.findByBoardWriterContaining(q, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+
+        Page<BoardDTO> boardList = boardEntities.map(boardEntity ->
+
+                BoardDTO.builder()
+                        .id(boardEntity.getId())
+                        .boardTitle(boardEntity.getBoardTitle())
+                        .boardWriter(boardEntity.getBoardWriter())
+                        .createdAt(UtilClass.dateFormat(boardEntity.getCreatedAt()))
+                        .boardHits(boardEntity.getBoardHits())
+                        .build()
+        );
+
+//                map > 페이지를 유지하면서 데이터를 옮겨줌
+
+        System.out.println("boardEntities.getContent() = " + boardList.getContent()); // 요청페이지에 들어있는 데이터
+        System.out.println("boardEntities.getTotalElements() = " + boardList.getTotalElements()); // 전체 글갯수
+        System.out.println("boardEntities.getNumber() = " + boardList.getNumber()); // 요청페이지(jpa 기준)
+        System.out.println("boardEntities.getTotalPages() = " + boardList.getTotalPages()); // 전체 페이지 갯수
+        System.out.println("boardEntities.getSize() = " + boardList.getSize()); // 한페이지에 보여지는 글갯수
+        System.out.println("boardEntities.hasPrevious() = " + boardList.hasPrevious()); // 이전페이지 존재 여부
+        System.out.println("boardEntities.isFirst() = " + boardList.isFirst()); // 첫페이지인지 여부
+        System.out.println("boardEntities.isLast() = " + boardList.isLast()); // 마지막페이지인지 여부
 
 
-
-
+    }
 
 
 }
