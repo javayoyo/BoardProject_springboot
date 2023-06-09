@@ -23,7 +23,7 @@
             <tr th:each="board: ${boardList}">
                 <td th:text="${board.id}"></td>
                 <td th:text="${board.boardWriter}"></td>
-                <td><a th:href="@{|/board/${board.id}|}" th:text="${board.boardTitle}">제목</a></td>
+                <td><a th:href="@{|/board/${board.id}?page=${boardList.number+1}|}" th:text="${board.boardTitle}">제목</a></td>
                 <td th:text="${board.createdAt}"></td>
                 <td th:text="${board.boardHits}"></td>
             </tr>
@@ -50,6 +50,7 @@
 
                 <!-- startPage ~ endPage 까지 숫자를 만들어주는 역할
                     for(int page=startPage; page<=endPage; page++) -->
+<!--                page 반복변수로, start-end 까지 접근을 한다 -->
                 <li th:each="page: ${#numbers.sequence(startPage, endPage)}"
                     th:class="${page == boardList.number + 1} ? 'page-item active'" class="page-item">
                     <a class="page-link" th:text="${page}" th:href="@{/board(page=${page})}"></a>

@@ -71,9 +71,9 @@ public class BoardController {
 
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable Long id, Model model) {
+    public String findById(@PathVariable Long id, @RequestParam("page") int page, Model model) {
         boardService.updateHits(id);
-
+        model.addAttribute("page", page);
         try {
             BoardDTO boardDTO = boardService.findById(id);
             model.addAttribute("board", boardDTO);
