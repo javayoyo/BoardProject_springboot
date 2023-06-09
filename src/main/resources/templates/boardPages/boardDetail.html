@@ -24,6 +24,7 @@
         <tr>
             <th>date</th>
             <td th:text="${board.createdAt}"></td>
+        </tr>
         <tr>
             <th>hits</th>
             <td th:text="${board.boardHits}"></td>
@@ -47,80 +48,90 @@
     <div id="pass-check">
 
     </div>
-    <div id="comment-write-area">
-    <input type="text" id="comment-writer" placeholder="댓글작성자">
-    <input type="text" id="comment-contents" placeholder="댓글내용">
-    <button onclick="comment_write()">댓글작성</button>
 
+    <div class="container" id="comment-write">
+        <input type="text" id="comment-writer" placeholder="작성자">
+        <input type="text" id="comment-contents" placeholder="내용">
+        <button onclick="comment_write()">댓글작성</button>
     </div>
-    <div class="container"  id = "comment-list">
-
+    <div class="container" id="comment-list">
         <div th:if="${commentList == null}">
-            <p>작성된 댓글이 없습니다</p>
+            <p>작성된 댓글이 없습니다.</p>
         </div>
-
         <div th:unless="${commentList == null}">
-     <table class="table">
-
-         <tr>
-             <th>id</th>
-             <th>writer</th>
-             <th>contents</th>
-             <th>date</th>
-         </tr>
-
-         <tr th:each="comment: ${commentList}">
-             <td th:text="${comment.id}"></td>
-             <td th:text="${comment.commentWriter}"></td>
-             <td th:text="${comment.commentContents}"></td>
-             <td th:text="${comment.createdAt}"></td>
-         </tr>
-
-
-     </table>
+            <table class="table">
+                <tr>
+                    <th>id</th>
+                    <th>writer</th>
+                    <th>contents</th>
+                    <th>date</th>
+                </tr>
+                <tr th:each="comment: ${commentList}">
+                    <td th:text="${comment.id}"></td>
+                    <td th:text="${comment.commentWriter}"></td>
+                    <td th:text="${comment.commentContents}"></td>
+                    <td th:text="${comment.createdAt}"></td>
+                </tr>
+            </table>
+        </div>
     </div>
-    </div>
-
-    <div id="comment-result">
-
-    </div>
-
 
 </div>
 
 <div th:replace="component/footer :: footer"></div>
 </body>
 <script th:inline="javascript">
-
     const comment_list = (commentList) => {
         console.log("댓글 목록 함수", commentList);
         const resultArea = document.querySelector("#comment-list");
-        let output = "    <table class=\"table\">\n" +
-            "         <tr>\n" +
-            "             <th>id</th>\n" +
-            "             <th>writer</th>\n" +
-            "             <th>contents</th>\n" +
-            "             <th>date</th>\n" +
-            "         </tr>";
-        for(let i in commentList) {
-            output += " <tr>\n" +
-                "             <td> "+ commentList[i].id + "</td>\n" +
-                "             <td> "+ commentList[i].commentWriter + "</td>\n" +
-                "             <td> "+ commentList[i].commentContents + "</td>\n" +
-                "             <td> "+ commentList[i].createdAt + "</td>\n" +
-
-                "         </tr>";
+        let output = "        <table class=\"table\">\n" +
+            "            <tr>\n" +
+            "                <th>id</th>\n" +
+            "                <th>writer</th>\n" +
+            "                <th>contents</th>\n" +
+            "                <th>date</th>\n" +
+            "            </tr>";
+        for (let i in commentList) {
+            output += "<tr>\n" +
+                "                <td>" + commentList[i].id + "</td>\n" +
+                "                <td>" + commentList[i].commentWriter + "</td>\n" +
+                "                <td>" + commentList[i].commentContents + "</td>\n" +
+                "                <td>" + commentList[i].createdAt + "</td>\n" +
+                "            </tr>";
         }
         output += "</table>";
         resultArea.innerHTML = output;
-
     }
 
+    const comment_write = () => {
+        const writer = document.querySelector("#comment-writer").value;
+        const contents = document.querySelector("#comment-contents").value;
+        const boardId = [[${board.id}]];
+        axios({
+            method: "post",
+            url: "/comment/save",
+            data: {
+                commentWriter: writer,
+                commentContents: contents,
+                boardId: boardId
+            }
+        }).then(res => {
+            console.log("res", res);
+            console.log("댓글 목록", res.data);
+            document.querySelector("#comment-writer").value = "";
+            document.querySelector("#comment-contents").value = "";
+            comment_list(res.data);
+        }).catch(err => {
+            console.log("err", err);
+        });
+    }
 
     const list_req = () => {
         // location.href = "/board/";
         const page = [[${page}]];
-        location.href = "/board?page=" + page;
+        const type = [[${type}]];
+        const q = [[${q}]];
+        location.href = "/board?page=" + page + "&type=" + type + "&q=" + q;
     }
 
     const req = (type) => {
@@ -141,7 +152,7 @@
                 // location.href = "/board/delete/"+id;
                 axios({
                     method: "delete",
-                    url: "/board/"+id
+                    url: "/board/" + id
                 }).then(res => {
                     location.href = "/board/";
                 }).catch(err => {
@@ -162,35 +173,6 @@
         } else {
             alert("비밀번호 불일치!!");
         }
-    }
-
-    const comment_write = () => {
-        const writer = document.querySelector("#comment-writer").value;
-        const contents = document.querySelector("#comment-contents").value;
-        const boardId = [[${board.id}]];
-        // const result = document.getElementById("comment-list");
-
-        axios({
-            method: "post",
-            url: "/comment/save",
-            data: {
-              commentWriter: writer,
-              commentContents: contents,
-              boardId: boardId
-            }
-
-        }).then(res => {
-            console.log("res", res);
-            console.log("댓글 목록", res.data);
-            document.querySelector("#comment-writer").value = "";
-            document.querySelector("#comment-contents").value = "";
-            comment_list(res.data);
-
-        }).catch(err => {
-            console.log("err", err);
-
-        });
-
     }
 
 
